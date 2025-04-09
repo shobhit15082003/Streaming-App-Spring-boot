@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name = "videos")
@@ -16,6 +17,8 @@ import lombok.*;
 public class Video {
 
     @Id
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
     private String videoId;
     private String title;
     private String description;
@@ -23,8 +26,6 @@ public class Video {
     private String filePath;
 
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+
 
 }
