@@ -22,4 +22,9 @@ public class Video {
     private String contentType;
     private String filePath;
 
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
 }

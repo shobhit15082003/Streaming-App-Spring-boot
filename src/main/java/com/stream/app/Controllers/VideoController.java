@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+
 import java.util.UUID;
 
 @RestController
@@ -17,6 +18,7 @@ import java.util.UUID;
 public class VideoController {
 
     private VideoService videoService;
+    private String baka;
 
     public VideoController(VideoService videoService) {
         this.videoService = videoService;
@@ -31,7 +33,6 @@ public class VideoController {
         Video video=new Video();
         video.setTitle(title);
         video.setDescription(description);
-        video.setVideoId(UUID.randomUUID().toString());
 
         videoService.save(video,file);
 
