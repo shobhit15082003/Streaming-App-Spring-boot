@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import uploadImage from "../../src/pictures/upload.png";
 import { Alert, Button, Card, Label, Progress, Textarea, TextInput } from "flowbite-react";
+import toast from "react-hot-toast";
 
 const VideoUpload = () => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -39,6 +40,15 @@ const VideoUpload = () => {
     submitFileToServer(selectedFile,meta);
   }
 
+  function resetForm(){
+    setMeta({
+        title:"",
+        description:""
+    });
+    setSelectedFile(null);
+    setUploading(false);
+    
+  }
 
   async function submitFileToServer(video,videoMetaData){
     setUploading(true);
@@ -59,13 +69,17 @@ const VideoUpload = () => {
             }
         }); 
         console.log(response);
-        setMessage("Message uploaded");
+        setMessage("File uploaded");
+        setProgress(0);
         setUploading(false);
+        toast.success("File uploaded succcessfully!");
+        resetForm();
     }
     catch(error){
         console.log(error);
         setMessage("Error in uploading file");
         setUploading(false);
+        toast.error("File not uploaded!");
     }
   } 
 
@@ -81,7 +95,7 @@ const VideoUpload = () => {
             <div className="mb-2 block">
               <Label htmlFor="text-upload" value="Video uplaod" />
             </div>
-            <TextInput onChange={handleFormFieldChange} name="title"  placeholder="Enter title" />
+            <TextInput value={meta.title} onChange={handleFormFieldChange} name="title"  placeholder="Enter title" />
           </div>
 
           <div className="max-w-md">
@@ -91,6 +105,7 @@ const VideoUpload = () => {
               </Label>
             </div>
             <Textarea
+            value={meta.description}
             onChange={handleFormFieldChange}
             name="description"
               id="comment"
@@ -112,6 +127,7 @@ const VideoUpload = () => {
             <label className="block">
               <span className="sr-only">Choose video file</span>
               <input
+            //   value={selectedFile}
                 name="file"
                 type="file"
                 accept="video/*"
@@ -132,6 +148,7 @@ const VideoUpload = () => {
                {
                 uploading && (
                     <Progress
+                    color="green"
                     progress={progress}
                     textLabel="Uploading.."
                     size="lg"
@@ -144,7 +161,14 @@ const VideoUpload = () => {
             <div>
                 {
                     message && (
-                    <Alert color="success">
+                    <Alert 
+                    rounded
+                    withBorderAccent
+                    color="success"
+                    onDismiss={()=>{
+                        setMessage("");
+                    }}
+                    >
                     <span className="font-medium">Success Alret!</span>{message}
                 </Alert>
                 )}
