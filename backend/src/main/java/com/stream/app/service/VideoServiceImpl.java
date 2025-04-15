@@ -3,9 +3,16 @@ package com.stream.app.service;
 import com.stream.app.entities.Video;
 import com.stream.app.repository.VideoRepository;
 import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -84,9 +91,18 @@ public class VideoServiceImpl implements VideoService{
             video.setContentType(contentType);
             video.setFilePath(path.toString());
 
-            processVideo(video.getVideoId());
+
+            Video savedVideo = videoRepository.save(video);
+            //processing video
+            processVideo(savedVideo.getVideoId());
+
+            //delete actual video file if exception
+
+
+
+
             //metadata save
-            return videoRepository.save(video);
+            return savedVideo;
 
 
         }
@@ -174,6 +190,45 @@ public class VideoServiceImpl implements VideoService{
             throw new RuntimeException(e);
         }
 
+    }
+
+
+    @GetMapping("/{videoId}/master.m3u8")
+    public ResponseEntity<Resource> serviceMasterFile(
+            @PathVariable String videoId
+    ){
+        Path path=Paths.get(HSL_DIR,videoId,"master.m3u8");
+        System.out.println(path);
+
+        if(!Files.exists(path)){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        FileSystemResource resource=new FileSystemResource(path);
+
+        return ResponseEntity
+                .ok()
+                .header(HttpHeaders.CONTENT_TYPE, "application/vnd.apple.mpegurl")
+                .body((Resource) resource);
+
+    }
+
+    @GetMapping("/{videoId}/{segment}.ts")
+    public ResponseEntity<Resource> serveSegment(
+            @PathVariable String videoId,
+            @PathVariable String segment
+    ){
+        Path path = Paths.get(HSL_DIR,videoId,segment+".ts");
+        if(Files.exists(path)){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        FileSystemResource resource = new FileSystemResource(path);
+
+        return ResponseEntity
+                .ok()
+                .header(HttpHeaders.CONTENT_TYPE,"video/mp2t")
+                .body((Resource) resource);
     }
 
 
