@@ -121,7 +121,7 @@ const VideoUpload = () => {
         }
       });
 
-      setMessage("Video uploaded successfully!");
+      setMessage("Video uploaded successfully!"+response.data.videoId);
       toast.success("Video uploaded successfully!");
       resetForm();
     } catch (error) {

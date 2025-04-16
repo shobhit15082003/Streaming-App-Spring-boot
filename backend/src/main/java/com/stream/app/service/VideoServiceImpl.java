@@ -157,7 +157,7 @@ public class VideoServiceImpl implements VideoService{
         Files.createDirectories(outputPath);
 
         String ffmpegCmd=String.format(
-          "ffmpeg -i \"%s\" -c:v libx264 -c:a aac -strict -2 -f hls -hls_time 10 -hls_list_size 0 -hls_segemnt_filename \"%s/segment_%%3d.ts\" \"%s/master.m3u8\"",
+          "ffmpeg -i \"%s\" -c:v libx264 -c:a aac -strict -2 -f hls -hls_time 10 -hls_list_size 0 -hls_segment_filename \"%s/segment_%%3d.ts\" \"%s/master.m3u8\"",
                 videoPath,HSL_DIR,outputPath
         );
 
@@ -193,43 +193,7 @@ public class VideoServiceImpl implements VideoService{
     }
 
 
-    @GetMapping("/{videoId}/master.m3u8")
-    public ResponseEntity<Resource> serviceMasterFile(
-            @PathVariable String videoId
-    ){
-        Path path=Paths.get(HSL_DIR,videoId,"master.m3u8");
-        System.out.println(path);
 
-        if(!Files.exists(path)){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        FileSystemResource resource=new FileSystemResource(path);
-
-        return ResponseEntity
-                .ok()
-                .header(HttpHeaders.CONTENT_TYPE, "application/vnd.apple.mpegurl")
-                .body((Resource) resource);
-
-    }
-
-    @GetMapping("/{videoId}/{segment}.ts")
-    public ResponseEntity<Resource> serveSegment(
-            @PathVariable String videoId,
-            @PathVariable String segment
-    ){
-        Path path = Paths.get(HSL_DIR,videoId,segment+".ts");
-        if(Files.exists(path)){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        FileSystemResource resource = new FileSystemResource(path);
-
-        return ResponseEntity
-                .ok()
-                .header(HttpHeaders.CONTENT_TYPE,"video/mp2t")
-                .body((Resource) resource);
-    }
 
 
 }

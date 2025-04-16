@@ -4,6 +4,7 @@ import com.stream.app.Payload.CustomMessage;
 import com.stream.app.constants.AppConstants;
 import com.stream.app.entities.Video;
 import com.stream.app.service.VideoService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.InputStreamResource;
@@ -172,6 +173,48 @@ public class VideoController {
         }
 
 
+    }
+
+
+    @Value("${file.video.hsl}")
+    String HSL_DIR;
+
+    @GetMapping("/{videoId}/master.m3u8")
+    public ResponseEntity<jakarta.annotation.Resource> serviceMasterFile(
+            @PathVariable String videoId
+    ){
+        Path path=Paths.get(HSL_DIR,videoId,"master.m3u8");
+        System.out.println(path);
+
+        if(!Files.exists(path)){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        FileSystemResource resource=new FileSystemResource(path);
+
+        return ResponseEntity
+                .ok()
+                .header(HttpHeaders.CONTENT_TYPE, "application/vnd.apple.mpegurl")
+                .body((jakarta.annotation.Resource) resource);
+
+    }
+
+    @GetMapping("/{videoId}/{segment}.ts")
+    public ResponseEntity<jakarta.annotation.Resource> serveSegment(
+            @PathVariable String videoId,
+            @PathVariable String segment
+    ){
+        Path path = Paths.get(HSL_DIR,videoId,segment+".ts");
+        if(!Files.exists(path)){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        FileSystemResource resource = new FileSystemResource(path);
+
+        return ResponseEntity
+                .ok()
+                .header(HttpHeaders.CONTENT_TYPE,"video/mp2t")
+                .body((jakarta.annotation.Resource) resource);
     }
 
 
