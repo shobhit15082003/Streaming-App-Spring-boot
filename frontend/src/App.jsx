@@ -1,76 +1,73 @@
 import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./App.css";
 import VideoUpload from "./components/VideoUpload";
 import { Toaster } from "react-hot-toast";
 import PlayerofVideo from "./components/PlayerofVideo";
 import { Button, TextInput } from "flowbite-react";
+import { motion } from "framer-motion";
 
 function App() {
-  const [count, setCount] = useState(0);
-  const [videoId,setVideoId]=useState(null);
-  const [fieldValue,setFieldValue]=useState(null);
-
-  function playVideo(videoId){
-    setVideoId(videoId);
-  }
+  const [videoId, setVideoId] = useState(null);
+  const [fieldValue, setFieldValue] = useState("");
 
   return (
     <>
       <Toaster />
-      <div className="flex flex-col items-center space-y-9 justify-center py-9">
-        <h1 className="text-3xl font-bold text-gray-700 dark:text-gray-100">
-          Video Streaming App
-        </h1>
-        {/* <div className="flex mt-14 w-full justify-around">
-          <div>
-            <h1 className="text-white">Playing Video</h1>
-            <video
-              id="my-video"
-              class="video-js"
-              controls
-              preload="auto"
-              width="640"          
-              data-setup="{}"
-            >
-              <source src="MY_VIDEO.mp4" type="video/mp4" />
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-white flex flex-col items-center justify-center px-4 py-6 space-y-10">
+        <motion.h1
+          initial={{ opacity: 0, y: -30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-4xl font-bold text-center"
+        >
+          🎥 Video Streaming App
+        </motion.h1>
 
-              <p class="vjs-no-js">
-                To view this video please enable JavaScript, and consider
-                upgrading to a web browser that
-                <a
-                  href="https://videojs.com/html5-video-support/"
-                  target="_blank"
-                >
-                  supports HTML5 video
-                </a>
-              </p>
-            </video>
-          </div>
-          <VideoUpload />
-        </div> */}
-        <div className="flex mt-14 w-full space-x-2 justify-between">
-          <div className="w-full">
-            <h1 className="text-white text-center mt-2">Playing Video</h1>
-           
-            <div>
-              <PlayerofVideo src={`http://localhost:8080/api/v1/videos/${videoId}/master.m3u8`}></PlayerofVideo>
-            </div>
-          </div>
-          <div className="my-4 flex space-x-4">
-              <TextInput
-                placeholder="Enter Video id here"
-                name="video_id_filed"
-                onClick={(event)=>{
-                  setFieldValue(event.target.value);
-                }}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-10"
+        >
+          <motion.div
+            className="flex flex-col items-center justify-center w-full p-4 rounded-lg bg-gray-800 shadow-lg"
+            whileHover={{ scale: 1.02 }}
+          >
+            <h2 className="text-xl mb-4 font-semibold">🎬 Playing Video</h2>
+            {videoId ? (
+              <PlayerofVideo
+                src={`http://localhost:8080/api/v1/videos/${videoId}/master.m3u8`}
               />
-              <Button onClick={()=>{
-                setVideoId(fieldValue);
-              }}>Play</Button>
+            ) : (
+              <p className="text-gray-400 mb-4 text-center">
+                Enter a Video ID to play it here
+              </p>
+            )}
+            <div className="mt-4 flex gap-2 w-full justify-center">
+              <TextInput
+                placeholder="Enter Video ID"
+                value={fieldValue}
+                onChange={(e) => setFieldValue(e.target.value)}
+                className="w-64 transition duration-300 focus:ring-2 focus:ring-cyan-500"
+              />
+              <Button
+                onClick={() => setVideoId(fieldValue)}
+                className="transition-all duration-300 hover:scale-105"
+              >
+                Play
+              </Button>
             </div>
-        </div>
+          </motion.div>
+
+          <motion.div
+            className="flex justify-center items-center"
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.3, duration: 0.5 }}
+          >
+            <VideoUpload />
+          </motion.div>
+        </motion.div>
       </div>
     </>
   );
