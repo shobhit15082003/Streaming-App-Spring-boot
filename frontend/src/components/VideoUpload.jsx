@@ -41,9 +41,12 @@ const VideoUpload = () => {
   return (
     <motion.div
       className="flex justify-center items-center w-full"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.7 }}
       whileHover={{ scale: 1.02 }}
     >
-      <Card className="flex flex-col items-center justify-center space-y-6 p-6 w-full max-w-md shadow-2xl bg-gray-800 text-white transition duration-300 hover:shadow-cyan-500/30">
+      <div className="bg-charcoal rounded-2xl shadow-electric-glow p-8 w-full max-w-md text-white transition duration-300 hover:shadow-electric-glow">
         <h2 className="text-2xl font-semibold text-center">📤 Upload Video</h2>
         <form onSubmit={handleSubmit} className="w-full space-y-4">
           <div>
@@ -54,7 +57,7 @@ const VideoUpload = () => {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
-              className="mt-1 focus:ring-cyan-400"
+              className="mt-1 focus:ring-electric-blue"
             />
           </div>
           <div>
@@ -64,18 +67,18 @@ const VideoUpload = () => {
               id="file"
               accept="video/*"
               onChange={(e) => setFile(e.target.files[0])}
-              className="mt-2 w-full text-sm text-gray-300 file:cursor-pointer file:bg-cyan-700 file:text-white file:px-3 file:py-1 file:rounded file:transition file:duration-300 hover:file:bg-cyan-800"
+              className="mt-2 w-full text-sm text-gray-300 file:cursor-pointer file:bg-electric-blue file:text-white file:px-3 file:py-1 file:rounded file:transition file:duration-300 hover:file:bg-neon-green"
               required
             />
           </div>
           <Button
             type="submit"
-            className="w-full transition duration-300 hover:scale-105"
+            className="w-full bg-gradient-to-r from-electric-blue to-neon-green text-white font-bold transition duration-300 hover:scale-105"
           >
             Upload
           </Button>
         </form>
-      </Card>
+      </div>
     </motion.div>
   );
 };

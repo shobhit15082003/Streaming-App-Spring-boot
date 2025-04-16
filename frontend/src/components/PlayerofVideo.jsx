@@ -20,10 +20,13 @@ const PlayerofVideo = ({ src }) => {
 
   return (
     <div className="w-full flex justify-center items-center">
-      <video
+      <motion.video
         ref={videoRef}
         controls
         autoPlay
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.6 }}
         className="w-full max-w-md rounded-lg shadow-lg"
       />
     </div>

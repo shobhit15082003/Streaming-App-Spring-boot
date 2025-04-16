@@ -13,12 +13,12 @@ function App() {
   return (
     <>
       <Toaster />
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-white flex flex-col items-center justify-center px-4 py-6 space-y-10">
+      <div className="min-h-screen bg-gradient-to-br from-deep-blue to-charcoal text-white flex flex-col items-center justify-center px-4 py-6 space-y-10">
         <motion.h1
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-4xl font-bold text-center"
+          className="text-5xl font-extrabold text-center bg-clip-text text-transparent bg-gradient-blue"
         >
           🎥 Video Streaming App
         </motion.h1>
@@ -30,8 +30,7 @@ function App() {
           className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-10"
         >
           <motion.div
-            className="flex flex-col items-center justify-center w-full p-4 rounded-lg bg-gray-800 shadow-lg"
-            whileHover={{ scale: 1.02 }}
+            className="flex flex-col items-center justify-center w-full p-6 rounded-2xl bg-charcoal shadow-electric-glow transition hover:shadow-electric-glow transform hover:scale-[1.03] duration-300"
           >
             <h2 className="text-xl mb-4 font-semibold">🎬 Playing Video</h2>
             {videoId ? (
@@ -48,11 +47,11 @@ function App() {
                 placeholder="Enter Video ID"
                 value={fieldValue}
                 onChange={(e) => setFieldValue(e.target.value)}
-                className="w-64 transition duration-300 focus:ring-2 focus:ring-cyan-500"
+                className="w-64 transition duration-300 focus:ring-2 focus:ring-electric-blue"
               />
               <Button
                 onClick={() => setVideoId(fieldValue)}
-                className="transition-all duration-300 hover:scale-105"
+                className="transition-all duration-300 hover:scale-105 bg-electric-blue hover:bg-neon-green"
               >
                 Play
               </Button>
